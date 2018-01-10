@@ -1186,7 +1186,8 @@ public class LauncherModel extends BroadcastReceiver
         Iterator<Long> iter = screensCopy.iterator();
         while (iter.hasNext()) {
             long id = iter.next();
-            if (id < 0) {
+            //返回负数且不为自定义屏
+            if (id < 0 && id > LauncherSettings.WorkspaceScreens.CUSTOM_CONTENT_SCREEN_START_ID) {
                 iter.remove();
             }
         }
@@ -1733,7 +1734,7 @@ public class LauncherModel extends BroadcastReceiver
             final ItemInfo[][] screens = occupied.get(item.screenId);
             if (item.container == LauncherSettings.Favorites.CONTAINER_DESKTOP &&
                     item.cellX < 0 || item.cellY < 0 ||
-                    item.cellX + item.spanX > countX || item.cellY + item.spanY > countY) {
+                    item.cellX + item.spanX > countX || (item.cellY + item.spanY > countY && (item.screenId >= 0/*负屏允许Y的跨度大于默认值*/))) {
                 Log.e(TAG, "Error loading shortcut " + item
                         + " into cell (" + containerIndex + "-" + item.screenId + ":"
                         + item.cellX + "," + item.cellY

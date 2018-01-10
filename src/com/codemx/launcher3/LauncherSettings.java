@@ -123,6 +123,12 @@ public class LauncherSettings {
          * <P>Type: INTEGER</P>
          */
         public static final String SCREEN_RANK = "screenRank";
+
+        /**
+         * 自定义负屏全屏界面开始的id，用于区分负一屏、负二屏等，
+         * 当screenId <= -300的时候则表示为负屏
+         */
+        static final long CUSTOM_CONTENT_SCREEN_START_ID = -300;
     }
 
     /**

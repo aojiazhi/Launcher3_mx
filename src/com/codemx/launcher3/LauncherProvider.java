@@ -164,7 +164,8 @@ public class LauncherProvider extends ContentProvider {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         addModifiedTime(initialValues);
         final long rowId = dbInsertAndCheck(mOpenHelper, db, args.table, null, initialValues);
-        if (rowId < 0) return null;
+        //返回负数且不为自定义负屏
+        if (rowId < 0 && rowId > LauncherSettings.WorkspaceScreens.CUSTOM_CONTENT_SCREEN_START_ID) return null;
 
         uri = ContentUris.withAppendedId(uri, rowId);
         notifyListeners();
@@ -1072,7 +1073,9 @@ public class LauncherProvider extends ContentProvider {
                 values.clear();
                 values.put(LauncherSettings.WorkspaceScreens._ID, id);
                 values.put(LauncherSettings.WorkspaceScreens.SCREEN_RANK, rank);
-                if (dbInsertAndCheck(this, db, TABLE_WORKSPACE_SCREENS, null, values) < 0) {
+                long insertId = dbInsertAndCheck(this, db, TABLE_WORKSPACE_SCREENS, null, values);
+                //返回负数且不为自定义负屏
+                if (insertId < 0 && insertId > LauncherSettings.WorkspaceScreens.CUSTOM_CONTENT_SCREEN_START_ID) {
                     throw new RuntimeException("Failed initialize screen table"
                             + "from default layout");
                 }
